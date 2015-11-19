@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		6A4A9A881BFE22250078BFC3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4A9A871BFE22250078BFC3 /* AppDelegate.swift */; };
-		6A4A9A8A1BFE22250078BFC3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4A9A891BFE22250078BFC3 /* ViewController.swift */; };
 		6A4A9A8D1BFE22250078BFC3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A4A9A8B1BFE22250078BFC3 /* Main.storyboard */; };
 		6A4A9A901BFE22250078BFC3 /* Jonsnow.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6A4A9A8E1BFE22250078BFC3 /* Jonsnow.xcdatamodeld */; };
 		6A4A9A921BFE22250078BFC3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A4A9A911BFE22250078BFC3 /* Assets.xcassets */; };
 		6A4A9A951BFE22250078BFC3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A4A9A931BFE22250078BFC3 /* LaunchScreen.storyboard */; };
 		6A4A9AA01BFE22250078BFC3 /* JonsnowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4A9A9F1BFE22250078BFC3 /* JonsnowTests.swift */; };
 		6A4A9AAB1BFE22250078BFC3 /* JonsnowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4A9AAA1BFE22250078BFC3 /* JonsnowUITests.swift */; };
+		6A4A9AB91BFE440D0078BFC3 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4A9AB81BFE440D0078BFC3 /* TabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +37,6 @@
 /* Begin PBXFileReference section */
 		6A4A9A841BFE22250078BFC3 /* Jonsnow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jonsnow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A4A9A871BFE22250078BFC3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6A4A9A891BFE22250078BFC3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		6A4A9A8C1BFE22250078BFC3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6A4A9A8F1BFE22250078BFC3 /* Jonsnow.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Jonsnow.xcdatamodel; sourceTree = "<group>"; };
 		6A4A9A911BFE22250078BFC3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,6 +48,7 @@
 		6A4A9AA61BFE22250078BFC3 /* JonsnowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JonsnowUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A4A9AAA1BFE22250078BFC3 /* JonsnowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JonsnowUITests.swift; sourceTree = "<group>"; };
 		6A4A9AAC1BFE22250078BFC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6A4A9AB81BFE440D0078BFC3 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,12 +100,12 @@
 			isa = PBXGroup;
 			children = (
 				6A4A9A871BFE22250078BFC3 /* AppDelegate.swift */,
-				6A4A9A891BFE22250078BFC3 /* ViewController.swift */,
 				6A4A9A8B1BFE22250078BFC3 /* Main.storyboard */,
 				6A4A9A911BFE22250078BFC3 /* Assets.xcassets */,
 				6A4A9A931BFE22250078BFC3 /* LaunchScreen.storyboard */,
 				6A4A9A961BFE22250078BFC3 /* Info.plist */,
 				6A4A9A8E1BFE22250078BFC3 /* Jonsnow.xcdatamodeld */,
+				6A4A9AB81BFE440D0078BFC3 /* TabBarController.swift */,
 			);
 			path = Jonsnow;
 			sourceTree = "<group>";
@@ -263,7 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A4A9A901BFE22250078BFC3 /* Jonsnow.xcdatamodeld in Sources */,
-				6A4A9A8A1BFE22250078BFC3 /* ViewController.swift in Sources */,
+				6A4A9AB91BFE440D0078BFC3 /* TabBarController.swift in Sources */,
 				6A4A9A881BFE22250078BFC3 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
