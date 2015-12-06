@@ -48,6 +48,16 @@
                ReferencedContainer = "container:Jonsnow.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6AB1F57E1C14193100CE3377"
+               BuildableName = "JonsnowTests2.xctest"
+               BlueprintName = "JonsnowTests2"
+               ReferencedContainer = "container:Jonsnow.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

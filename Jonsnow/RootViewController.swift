@@ -1,5 +1,5 @@
 //
-//  TabBarController.swift
+//  RootViewController.swift
 //  Jonsnow
 //
 //  Created by Park Hyunjeong on 11/20/15.
@@ -8,8 +8,15 @@
 
 import UIKit
 
-class TabBarController: UITabBarController {
+class RootViewController: UIViewController {
 
+    @IBOutlet weak var headerNameLabel: UILabel!
+    @IBOutlet weak var newButton: UIButton!
+    
+    @IBAction func newButtonClicked(sender: AnyObject) {
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
