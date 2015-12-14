@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Alamofire
 
 typealias ServiceResponse = (JSON, NSError?) -> Void
 
