@@ -23,9 +23,8 @@ class EddardGatewayTests: XCTestCase {
     }
     
     func testRegister() {
-        let gateway = EddardGateway()
         
-        gateway.register("", onCompletion: { response, json, error in
+        EddardGateway.SELF.register("", onCompletion: { response, json, error in
             print(response?.description)
             print(json)
             print(error)

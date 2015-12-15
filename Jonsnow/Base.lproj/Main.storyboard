@@ -8,7 +8,7 @@
         <!--Chatting-->
         <scene sceneID="S9p-U9-gma">
             <objects>
-                <tableViewController id="DfQ-Ya-HzE" sceneMemberID="viewController">
+                <tableViewController id="DfQ-Ya-HzE" customClass="ChattingTableViewController" customModule="Jonsnow" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="SSk-p2-wgk">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -28,7 +28,11 @@
                             <outlet property="delegate" destination="DfQ-Ya-HzE" id="Wep-4z-vj4"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Chatting" id="vYc-eZ-j1j"/>
+                    <navigationItem key="navigationItem" title="Chatting" id="vYc-eZ-j1j">
+                        <barButtonItem key="leftBarButtonItem" title="Edit" id="JgK-Fc-x53">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xgg-g3-iTT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -37,7 +41,7 @@
         <!--Friends-->
         <scene sceneID="eBA-Km-eqL">
             <objects>
-                <tableViewController id="hvj-m4-xtN" sceneMemberID="viewController">
+                <tableViewController id="hvj-m4-xtN" customClass="FriendTableViewController" customModule="Jonsnow" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="q2p-jT-t9x">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -99,10 +103,10 @@
             </objects>
             <point key="canvasLocation" x="1110" y="-344"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Root View Controller-->
         <scene sceneID="ky4-Rg-Vze">
             <objects>
-                <tabBarController id="qBL-dW-4wu" sceneMemberID="viewController">
+                <tabBarController id="qBL-dW-4wu" customClass="RootViewController" customModule="Jonsnow" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="MF2-DD-aSg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>

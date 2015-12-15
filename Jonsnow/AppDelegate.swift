@@ -16,8 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    var tokenString: String = String()
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: [UIUserNotificationType.Badge
@@ -26,8 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                                 , categories: nil))
         
         application.registerForRemoteNotifications()
-    
-        logger.debug("registerForRemoteNotifications called!")
+        
+        UITabBar.appearance().tintColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
         
         return true
     }
@@ -37,11 +35,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var byteBuffer = [UInt8](count: deviceToken.length, repeatedValue: 0x00)
         deviceToken.getBytes(&byteBuffer, length: byteBuffer.count)
         
+        var tokenString: String = String()
+        
         for byte in byteBuffer {
             tokenString = tokenString.stringByAppendingFormat("%02hhX", byte)
         }
         
-        logger.debug("device token : \(tokenString)")
+        EddardGateway.SELF.deviceToken = tokenString
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {

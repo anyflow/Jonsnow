@@ -16,23 +16,26 @@ class Logger {
         self.className = className
     }
     
-    private func log(type: String, message: String, function: String, line: Int) {
-        NSLog("\(type) [\(className).\(function):\(line)] \(message)")
+    private func log(type: String, message: String?, function: String, line: Int) {
+        
+        let msg: String = message == nil ? "null" : message!
+        
+        NSLog("\(type) [\(className).\(function):\(line)] \(msg)")
     }
     
-    func debug(message: String, function: String = __FUNCTION__, line: Int = __LINE__) {
+    func debug(message: String?, function: String = __FUNCTION__, line: Int = __LINE__) {
         log("DEBUG", message: message, function: function, line: line)
     }
     
-    func warn(message: String, function: String = __FUNCTION__, line: Int = __LINE__) {
+    func warn(message: String?, function: String = __FUNCTION__, line: Int = __LINE__) {
         log("WARN ", message: message, function: function, line: line)
     }
     
-    func info(message: String, function: String = __FUNCTION__, line: Int = __LINE__) {
+    func info(message: String?, function: String = __FUNCTION__, line: Int = __LINE__) {
         log("INFO ", message: message, function: function, line: line)
     }
     
-    func error(message: String, function: String = __FUNCTION__, line: Int = __LINE__) {
+    func error(message: String?, function: String = __FUNCTION__, line: Int = __LINE__) {
         log("ERROR", message: message, function: function, line: line)
     }
 
