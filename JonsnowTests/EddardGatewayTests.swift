@@ -11,7 +11,8 @@ import XCTest
 @testable import Jonsnow
 
 class EddardGatewayTests: XCTestCase {
-    
+    let logger: Logger = Logger(className : EddardGatewayTests.self.description())
+
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -25,9 +26,9 @@ class EddardGatewayTests: XCTestCase {
     func testRegister() {
         
         EddardGateway.SELF.register("", onCompletion: { response, json, error in
-            print(response?.description)
-            print(json)
-            print(error)
+            self.logger.debug(response?.description)
+            self.logger.debug(json.description)
+            self.logger.debug(error?.description)
         })
     }
 }
