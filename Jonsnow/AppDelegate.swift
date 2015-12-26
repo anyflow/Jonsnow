@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         
-        _ = userInfo["aps"]!["alert"]! as! String
+//        _ = userInfo["aps"]!["alert"]! as! String
 
         logger.debug("userInfo : \(userInfo)")
     }

@@ -8,6 +8,7 @@
 
 import XCTest
 import ObjectMapper
+import RealmSwift
 
 @testable import Jonsnow
 
@@ -46,6 +47,19 @@ class ObjectMapperTests : XCTestCase {
             let user = Mapper<User>().map(json)
             
             logger.debug(user?.description)
+            
+            if user == nil { return }
+            
+            let realm = try! Realm()
+            try! realm.write {
+                realm.add(user!)
+            }
+            
+            dispatch_sync(dispatch_queue_create("background", nil)) {
+                let userRealm = realm.objects(User).first
+                
+                self.logger.debug(userRealm?.description)
+            }
         }
         catch {
             logger.error("reading failed")

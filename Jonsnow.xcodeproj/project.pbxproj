@@ -14,6 +14,8 @@
 		6A4A9A901BFE22250078BFC3 /* Jonsnow.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6A4A9A8E1BFE22250078BFC3 /* Jonsnow.xcdatamodeld */; };
 		6A4A9A921BFE22250078BFC3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A4A9A911BFE22250078BFC3 /* Assets.xcassets */; };
 		6A4A9A951BFE22250078BFC3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A4A9A931BFE22250078BFC3 /* LaunchScreen.storyboard */; };
+		6A5892371C2ED27B008492D4 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A5892361C2ED27B008492D4 /* RealmSwift.framework */; };
+		6A5892381C2ED27B008492D4 /* RealmSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6A5892361C2ED27B008492D4 /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6A5E99891C1EFC700084E4B9 /* chat.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A5E99851C1EFC700084E4B9 /* chat.png */; };
 		6A5E998A1C1EFC700084E4B9 /* chat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A5E99861C1EFC700084E4B9 /* chat@2x.png */; };
 		6A5E998B1C1EFC700084E4B9 /* contacts.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A5E99871C1EFC700084E4B9 /* contacts.png */; };
@@ -28,6 +30,8 @@
 		6AC5C8831C2046EE00B1DB17 /* ChattingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC5C8811C2046EE00B1DB17 /* ChattingTableViewController.swift */; };
 		6AC5C8841C2046EE00B1DB17 /* FriendTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC5C8821C2046EE00B1DB17 /* FriendTableViewController.swift */; };
 		6AC5C8861C20472100B1DB17 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC5C8851C20472100B1DB17 /* RootViewController.swift */; };
+		6AF2D72D1C2ECF710014C8CD /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AF2D72C1C2ECF710014C8CD /* Realm.framework */; };
+		6AF2D72E1C2ECF710014C8CD /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6AF2D72C1C2ECF710014C8CD /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F4648C2E8B262E0872CDEF9F /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1609503A5CDBCE3BC2966192 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,9 +45,23 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		6AF2D72F1C2ECF710014C8CD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6A5892381C2ED27B008492D4 /* RealmSwift.framework in Embed Frameworks */,
+				6AF2D72E1C2ECF710014C8CD /* Realm.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		1609503A5CDBCE3BC2966192 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3273563DF2821529F80E2DA6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		6A1CEA9D1C133CEC00559BBC /* EddardGateway.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EddardGateway.swift; sourceTree = "<group>"; };
 		6A1CEA9F1C13987100559BBC /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		6A4A9A841BFE22250078BFC3 /* Jonsnow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jonsnow.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +73,7 @@
 		6A4A9A961BFE22250078BFC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A4A9A9B1BFE22250078BFC3 /* JonsnowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JonsnowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A4A9AA11BFE22250078BFC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6A5892361C2ED27B008492D4 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Frameworks/RealmSwift.framework; sourceTree = "<group>"; };
 		6A5E99851C1EFC700084E4B9 /* chat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chat.png; sourceTree = "<group>"; };
 		6A5E99861C1EFC700084E4B9 /* chat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat@2x.png"; sourceTree = "<group>"; };
 		6A5E99871C1EFC700084E4B9 /* contacts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contacts.png; sourceTree = "<group>"; };
@@ -70,7 +89,9 @@
 		6AC5C8811C2046EE00B1DB17 /* ChattingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChattingTableViewController.swift; sourceTree = "<group>"; };
 		6AC5C8821C2046EE00B1DB17 /* FriendTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendTableViewController.swift; sourceTree = "<group>"; };
 		6AC5C8851C20472100B1DB17 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
-		6D0E52A7BCFDB3CEFA74A6B6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		6AF2D72C1C2ECF710014C8CD /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Frameworks/Realm.framework; sourceTree = "<group>"; };
+		7FEFFCD8CE8248AF75B719CA /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		C3B41FA34C10FF717CB63015 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,7 +99,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6AF2D72D1C2ECF710014C8CD /* Realm.framework in Frameworks */,
 				F4648C2E8B262E0872CDEF9F /* Pods.framework in Frameworks */,
+				6A5892371C2ED27B008492D4 /* RealmSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +118,8 @@
 		1A20EDC5D1DA4DC74262495C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6A5892361C2ED27B008492D4 /* RealmSwift.framework */,
+				6AF2D72C1C2ECF710014C8CD /* Realm.framework */,
 				1609503A5CDBCE3BC2966192 /* Pods.framework */,
 			);
 			name = Frameworks;
@@ -103,8 +128,8 @@
 		45124085A6D5397507E4CCEF /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6D0E52A7BCFDB3CEFA74A6B6 /* Pods.debug.xcconfig */,
-				3273563DF2821529F80E2DA6 /* Pods.release.xcconfig */,
+				7FEFFCD8CE8248AF75B719CA /* Pods.debug.xcconfig */,
+				C3B41FA34C10FF717CB63015 /* Pods.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -205,6 +230,7 @@
 				7268FC6317EFFAB3907E1C58 /* Embed Pods Frameworks */,
 				560526A8D5CB3B9E1144F4AC /* Copy Pods Resources */,
 				6AB948AC1C13E688008F12C1 /* ShellScript */,
+				6AF2D72F1C2ECF710014C8CD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -507,7 +533,7 @@
 		};
 		6A4A9AB01BFE22250078BFC3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6D0E52A7BCFDB3CEFA74A6B6 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 7FEFFCD8CE8248AF75B719CA /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -516,6 +542,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = Jonsnow/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -529,7 +557,7 @@
 		};
 		6A4A9AB11BFE22250078BFC3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3273563DF2821529F80E2DA6 /* Pods.release.xcconfig */;
+			baseConfigurationReference = C3B41FA34C10FF717CB63015 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -538,6 +566,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = Jonsnow/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -552,6 +582,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = "${SRCROOT}/Frameworks";
 				INFOPLIST_FILE = JonsnowTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lge.stark.JonsnowTests;
@@ -564,6 +595,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = "${SRCROOT}/Frameworks";
 				INFOPLIST_FILE = JonsnowTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lge.stark.JonsnowTests;
