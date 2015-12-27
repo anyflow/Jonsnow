@@ -19,38 +19,30 @@ class EddardGateway {
     private init() {
     }
     
-    var deviceToken: String! {
-        didSet {
-            register(deviceToken, onCompletion: { response, json, error in
-                print(response?.description)
-                print(json)
-                print(error)
-            })
-            
-            logger.debug(deviceToken)
-        }
-    }
+    let baseUri : String = "http://192.168.0.5:8090"
     
-    let baseUri : String = "http://localhost:8080"
-    
-    func registerAlamofire(receiverId: String, onCompletion: (NSURLResponse?, JSON, NSError?) -> Void) {
-        let semaphore = dispatch_semaphore_create(0)
-
-        Alamofire.request(.GET, "https://httpbin.org/get", parameters: ["foo": "bar"])
-            .responseJSON { response in
-                self.logger.debug(response.request?.description)
-                self.logger.debug(response.response?.description)
-                self.logger.debug(response.data?.description)
-                self.logger.debug(response.result.description)
-                
-                if let json = response.result.value {
-                    self.logger.debug("json: \(json)")
-                }
-                
-                dispatch_semaphore_signal(semaphore)
+    func register(device: Device?) {
+        guard let device = device else {
+            logger.error("device should not be nil")
+            return
         }
         
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+        let request = NSMutableURLRequest(URL: NSURL(string: baseUri + "/device")!)
+        
+        request.HTTPMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.HTTPBody = (device.jsonString as NSString).dataUsingEncoding(NSUTF8StringEncoding)!
+        
+        
+        Alamofire.request(request).response { response in
+            if let code = response.1?.statusCode {
+                self.logger.debug(response.1?.description)
+            }
+            else {
+                self.logger.error(response.3?.description)
+            }
+            
+        }
     }
     
     @noreturn
@@ -58,7 +50,7 @@ class EddardGateway {
         
     }
     
-    func register(receiverId: String, onCompletion: (NSURLResponse?, JSON, NSError?) -> Void) {
+    func testRegister(receiverId: String, onCompletion: (NSURLResponse?, JSON, NSError?) -> Void) {
         let semaphore = dispatch_semaphore_create(0)
         
         let request : NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: "https://httpbin.org/get?foo=bar")!)

@@ -19,24 +19,8 @@ class User: Object, Mappable {
     dynamic var phoneNumber: String?
     dynamic var createDate: NSDate?
     
-    required init?(_ map: Map) {
-        super.init()
-    }
-    
-    required init() {
-        super.init()
-    }
-    
-    override init(value: AnyObject) {
-        super.init(value:value)
-    }
-    
-    override init(value: AnyObject, schema: RLMSchema) {
-        super.init(value:value, schema:schema)
-    }
-    
-    override init(realm: RLMRealm, schema: RLMObjectSchema) {
-        super.init(realm:realm, schema:schema)
+    required convenience init?(_ map: Map) {
+        self.init()
     }
     
     func mapping(map: Map) {

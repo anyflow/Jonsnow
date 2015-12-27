@@ -26,7 +26,7 @@ class ObjectMapperTests : XCTestCase {
         super.tearDown()
     }
     
-    func testSerialize() {
+    func testJsonConvert() {
         
         let filemgr = NSFileManager.defaultManager()
         
@@ -44,26 +44,23 @@ class ObjectMapperTests : XCTestCase {
 
             logger.debug("json : \(json as String)")
             
-            let user = Mapper<User>().map(json)
-            
-            logger.debug(user?.description)
-            
-            if user == nil { return }
-            
-            let realm = try! Realm()
-            try! realm.write {
-                realm.add(user!)
+            guard let user = Mapper<User>().map(json) else {
+                return
             }
             
-            dispatch_sync(dispatch_queue_create("background", nil)) {
-                let userRealm = realm.objects(User).first
-                
-                self.logger.debug(userRealm?.description)
-            }
+            logger.debug(user.description)
+            
+            logger.debug(Mapper().toJSONString(user, prettyPrint: true))
         }
         catch {
             logger.error("reading failed")
         }
+    }
+    
+    func testToJson() {
+        let map = Map(mappingType: MappingType.FromJSON, JSONDictionary: ["receiverId": "testReceiverId", "isActive": true])
+        let device = Device(map)
         
+        logger.debug(Mapper().toJSONString(device!, prettyPrint: true))
     }
 }
