@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Settings.SELF.deviceToken = tokenString
         
         let device = Device()
-        device.deviceId = Settings.SELF.deviceId!
+        device.deviceId = Settings.SELF.deviceId
         device.receiverId = Settings.SELF.deviceToken!
         device.isActive = true
         

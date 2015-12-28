@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import UIKit
 
 class Settings: Object {
     
@@ -20,11 +21,8 @@ class Settings: Object {
             logger.debug("oldValue:\(oldValue) | newValue:\(deviceToken)")
         }
     }
-    dynamic var deviceId: String? {
-        didSet {
-            logger.debug("oldValue:\(oldValue) | newValue:\(deviceId)")
-        }
-    }
+    
+    var deviceId: String = UIDevice.currentDevice().identifierForVendor!.UUIDString
     
     required init() {
         super.init()
@@ -51,19 +49,12 @@ class Settings: Object {
             if let deviceToken = db.deviceToken {
                 self.deviceToken = deviceToken
             }
-            if let deviceId = db.deviceId {
-                self.deviceId = deviceId
-            }
         }
         else {
             self.logger.error("Data in Realm is nil")
         }
         
-        if self.deviceId == nil {
-            self.deviceId = NSUUID().UUIDString
-        }
-        
         logger.debug("device token : \(deviceToken)")
-        logger.debug("device Id : \(deviceId)")
+        logger.debug("device id : \(deviceId)")
     }
 }
