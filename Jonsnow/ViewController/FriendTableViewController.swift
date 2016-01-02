@@ -10,16 +10,24 @@ import UIKit
 
 class FriendTableViewController: UITableViewController {
 
+    let logger: Logger = Logger(className: FriendTableViewController.self.description())
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
+        self.clearsSelectionOnViewWillAppear = false
+        self.navigationItem.rightBarButtonItem = self.editButtonItem()
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        
+        EddardGateway.SELF.getUsers { users in
+            guard let users = users else {
+                return
+            }
+            
+            for user in users {
+                self.logger.debug(user.description)
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {

@@ -22,13 +22,16 @@ class EddardGatewayTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
-    func testRegister() {
+
+    func testGetUsers() {
+        let expectation = expectationWithDescription("Alamofire")
+        EddardGateway.SELF.getUsers { users in
+            
+            self.logger.debug(users?[0].description)
+            
+            expectation.fulfill()
+        }
         
-        EddardGateway.SELF.testRegister("", onCompletion: { response, json, error in
-            self.logger.debug(response?.description)
-            self.logger.debug(json.description)
-            self.logger.debug(error?.description)
-        })
+        waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 }

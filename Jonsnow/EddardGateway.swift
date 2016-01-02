@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import ObjectMapper
 
 typealias ServiceResponse = (JSON, NSError?) -> Void
 
@@ -33,9 +34,8 @@ class EddardGateway {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.HTTPBody = (device.jsonString as NSString).dataUsingEncoding(NSUTF8StringEncoding)!
         
-        
         Alamofire.request(request).response { response in
-            if let code = response.1?.statusCode {
+            if let _ = response.1?.statusCode {
                 self.logger.debug(response.1?.description)
             }
             else {
@@ -44,30 +44,27 @@ class EddardGateway {
             
         }
     }
-    
-    @noreturn
-    func getUsers() -> [User] {
+
+    func getUsers(completionHandler: ([User]? -> Void)?) {
+        let userId = Settings.SELF.userId;
         
-    }
-    
-    func testRegister(receiverId: String, onCompletion: (NSURLResponse?, JSON, NSError?) -> Void) {
-        let semaphore = dispatch_semaphore_create(0)
-        
-        let request : NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: "https://httpbin.org/get?foo=bar")!)
-        request.HTTPMethod = "GET"
-        
-        let session = NSURLSession.sharedSession()
-        
-        
-        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            let json:JSON = JSON(data: data!)
-            onCompletion(response, json, error)
-            
-            dispatch_semaphore_signal(semaphore)
-        })
-        
-        task.resume()
-        
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+        Alamofire.request(.GET, "\(baseUri)/user/\(userId)/friend").responseString { response in
+
+            if let json = response.result.value {
+                if let users: Array<User> = Mapper<User>().mapArray(json) {
+                    self.logger.debug(users[0].description)
+
+                    completionHandler?(users)
+                }
+                else {
+                    self.logger.debug("nil!!")
+
+                    completionHandler?(nil)
+                }
+            }
+            else {
+                completionHandler?(nil)
+            }
+        }
     }
 }

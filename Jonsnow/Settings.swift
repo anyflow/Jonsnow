@@ -23,10 +23,12 @@ class Settings: Object {
     }
     
     var deviceId: String = UIDevice.currentDevice().identifierForVendor!.UUIDString
+    let userId:String = "37cd2cd5-0a1e-4641-9f5e-6096b16b64d5"
+
     
     required init() {
         super.init()
-        
+    
         load()
     }
     
