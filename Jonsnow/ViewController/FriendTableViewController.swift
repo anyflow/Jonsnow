@@ -12,12 +12,14 @@ class FriendTableViewController: UITableViewController {
 
     let logger: Logger = Logger(className: FriendTableViewController.self.description())
 
+    var users: [User]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.clearsSelectionOnViewWillAppear = false
-        self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        self.navigationItem.leftBarButtonItem = self.editButtonItem()
+        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
         
         EddardGateway.SELF.getUsers { users in
             guard let users = users else {
@@ -27,6 +29,10 @@ class FriendTableViewController: UITableViewController {
             for user in users {
                 self.logger.debug(user.description)
             }
+            
+            self.users = users
+            
+            self.tableView.reloadData()
         }
     }
 
@@ -38,24 +44,31 @@ class FriendTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        
+        guard let users = self.users else {
+            return 0
+        }
+        
+        return users.count
     }
 
-    /*
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("FriendCell", forIndexPath: indexPath)
 
-        // Configure the cell...
+        guard let users = self.users else {
+            return cell
+        }
 
+        let user = users[indexPath.row] as User
+        cell.textLabel?.text = user.name
+        cell.detailTextLabel?.text = user.department
+        
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.

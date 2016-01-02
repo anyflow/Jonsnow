@@ -545,7 +545,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks",
 				);
@@ -569,7 +568,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Frameworks",
 				);

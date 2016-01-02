@@ -16,14 +16,8 @@ class ChattingTableViewController: UITableViewController {
         super.viewDidLoad()
 
         self.clearsSelectionOnViewWillAppear = false
-
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "LeftButtonTitle", style: UIBarButtonItemStyle.Plain, target: self, action: "")
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "RigthButtonTitle", style: UIBarButtonItemStyle.Plain, target: self, action: "")
-        
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-        
-        logger.debug(self.navigationItem.leftBarButtonItem?.title);
-        logger.debug(self.navigationItem.rightBarButtonItem?.title);
+        self.navigationItem.leftBarButtonItem = self.editButtonItem()
+        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
     }
 
     override func didReceiveMemoryWarning() {
