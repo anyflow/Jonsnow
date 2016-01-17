@@ -131,7 +131,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="600" height="550"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="108" id="QDa-6S-dEE">
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatCell" rowHeight="108" id="QDa-6S-dEE" customClass="SendmessageTableViewCell" customModule="Jonsnow" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="92" width="600" height="108"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QDa-6S-dEE" id="w2h-cy-Iwk">
@@ -144,7 +144,7 @@
                                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="GNr-L7-rMs">
                                                                             <rect key="frame" x="0.0" y="0.0" width="600" height="16"/>
                                                                             <subviews>
-                                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Correspondant Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Y8-cJ-Nas">
+                                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Correspondant Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Y8-cJ-Nas">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="16"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -157,7 +157,7 @@
                                                                             <subviews>
                                                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ca9-3a-Gfp">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="500" height="91"/>
-                                                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                                    <color key="backgroundColor" red="0.92990785259999997" green="0.92990785259999997" blue="0.92990785259999997" alpha="1" colorSpace="calibratedRGB"/>
                                                                                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercit</string>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -175,7 +175,7 @@
                                                                             </subviews>
                                                                             <constraints>
                                                                                 <constraint firstItem="Jfu-En-Kc8" firstAttribute="top" secondItem="y3p-jp-DZb" secondAttribute="top" constant="71" id="2dQ-SQ-A9C"/>
-                                                                                <constraint firstItem="ca9-3a-Gfp" firstAttribute="top" secondItem="y3p-jp-DZb" secondAttribute="top" id="szr-JC-xsZ"/>
+                                                                                <constraint firstItem="ca9-3a-Gfp" firstAttribute="top" secondItem="y3p-jp-DZb" secondAttribute="top" id="bji-qR-SZN"/>
                                                                             </constraints>
                                                                         </stackView>
                                                                     </subviews>
@@ -191,6 +191,11 @@
                                                                 <constraint firstItem="JZ0-Yo-WCs" firstAttribute="top" secondItem="w2h-cy-Iwk" secondAttribute="top" id="vSU-JC-5ig"/>
                                                             </constraints>
                                                         </tableViewCellContentView>
+                                                        <connections>
+                                                            <outlet property="labelName" destination="3Y8-cJ-Nas" id="Vue-0s-8Jl"/>
+                                                            <outlet property="labelSendDate" destination="Jfu-En-Kc8" id="eHs-S6-v7F"/>
+                                                            <outlet property="textviewChat" destination="ca9-3a-Gfp" id="aS8-As-qla"/>
+                                                        </connections>
                                                     </tableViewCell>
                                                 </prototypes>
                                             </tableView>
@@ -212,6 +217,9 @@
                                                 </constraints>
                                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Send"/>
+                                                <connections>
+                                                    <action selector="send:" destination="Pp5-YR-9LY" eventType="touchUpInside" id="qZf-Oo-z16"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -252,6 +260,8 @@
                     </navigationItem>
                     <connections>
                         <outlet property="bottomHeight" destination="3Ts-Ok-WcT" id="bgd-vf-DSu"/>
+                        <outlet property="tableviewChat" destination="9WD-eL-J8V" id="vT4-wZ-fxZ"/>
+                        <outlet property="textfieldMessage" destination="tVo-xw-NTJ" id="3sE-eK-l3t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vXC-jF-UWu" userLabel="First Responder" sceneMemberID="firstResponder"/>

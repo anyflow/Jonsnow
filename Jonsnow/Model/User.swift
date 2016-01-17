@@ -16,7 +16,7 @@ class User: Object, Mappable {
     dynamic var name: String?
     dynamic var department: String?
     dynamic var dummy: String?
-//    dynamic var createDate: NSDate?
+    //    dynamic var createDate: NSDate?
     
     required convenience init?(_ map: Map) {
         self.init()
@@ -27,14 +27,14 @@ class User: Object, Mappable {
         name        <- map["name"]
         department  <- map["description"]
         dummy       <- map["friends"]
-//        createDate  <- map["createDate"]
+        //        createDate  <- map["createDate"]
     }
     
     override var description: String {
         return "\r\n"
-             + "id           : \(id)\r\n"
-             + "name         : \(name)\r\n"
-             + "department   : \(department)\r\n"
-//             + "createDate   : \(createDate)"
+            + "id           : \(id)\r\n"
+            + "name         : \(name)\r\n"
+            + "department   : \(department)\r\n"
+        //             + "createDate   : \(createDate)"
     }
 }
