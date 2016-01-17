@@ -33,6 +33,7 @@
 		6AC5C8861C20472100B1DB17 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC5C8851C20472100B1DB17 /* RootViewController.swift */; };
 		6AF2D72D1C2ECF710014C8CD /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AF2D72C1C2ECF710014C8CD /* Realm.framework */; };
 		6AF2D72E1C2ECF710014C8CD /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6AF2D72C1C2ECF710014C8CD /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6AF9C5951C4B28E800CB203F /* SendMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF9C5941C4B28E800CB203F /* SendMessageViewController.swift */; };
 		F4648C2E8B262E0872CDEF9F /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1609503A5CDBCE3BC2966192 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -92,6 +93,7 @@
 		6AC5C8821C2046EE00B1DB17 /* FriendTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendTableViewController.swift; sourceTree = "<group>"; };
 		6AC5C8851C20472100B1DB17 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		6AF2D72C1C2ECF710014C8CD /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Frameworks/Realm.framework; sourceTree = "<group>"; };
+		6AF9C5941C4B28E800CB203F /* SendMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageViewController.swift; sourceTree = "<group>"; };
 		7FEFFCD8CE8248AF75B719CA /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		C3B41FA34C10FF717CB63015 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -215,6 +217,7 @@
 				6AC5C8811C2046EE00B1DB17 /* ChattingTableViewController.swift */,
 				6AC5C8821C2046EE00B1DB17 /* FriendTableViewController.swift */,
 				6AC5C8851C20472100B1DB17 /* RootViewController.swift */,
+				6AF9C5941C4B28E800CB203F /* SendMessageViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -408,6 +411,7 @@
 				6AA563E91C20154500730551 /* Room.swift in Sources */,
 				6A4A9A881BFE22250078BFC3 /* AppDelegate.swift in Sources */,
 				6AC5C8841C2046EE00B1DB17 /* FriendTableViewController.swift in Sources */,
+				6AF9C5951C4B28E800CB203F /* SendMessageViewController.swift in Sources */,
 				6AC5C8831C2046EE00B1DB17 /* ChattingTableViewController.swift in Sources */,
 				6A1CEAA01C13987100559BBC /* SwiftyJSON.swift in Sources */,
 			);

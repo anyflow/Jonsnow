@@ -34,6 +34,8 @@ class FriendTableViewController: UITableViewController {
             
             self.tableView.reloadData()
         }
+        
+        
     }
 
     override func didReceiveMemoryWarning() {

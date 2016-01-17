@@ -41,7 +41,6 @@ class EddardGateway {
             else {
                 self.logger.error(response.3?.description)
             }
-            
         }
     }
 
