@@ -1,3 +1,4 @@
+
 //
 //  EddardGateway.swift
 //  Jonsnow
@@ -9,6 +10,7 @@
 import Foundation
 import Alamofire
 import ObjectMapper
+import Starscream
 
 typealias ServiceResponse = (JSON, NSError?) -> Void
 
@@ -18,9 +20,51 @@ class EddardGateway {
     private let logger: Logger = Logger(className: "EddardGateway")
     
     private init() {
+        socket = WebSocket(url: NSURL(string: "ws://192.168.0.9:8090/websocket")!, protocols: ["smp_v1.0"])
+        
+        initWebsocket()
+    }
+
+    var socket : WebSocket
+
+    let baseUri : String = "192.168.0.9:8090"
+    let httpScheme : String = "http://"
+    let websocketScheme : String = "ws://"
+    let websocketPath : String = "/websocket"
+    
+    func initWebsocket() {
+        logger.debug("initWebsocket called!")
+        
+        socket.onConnect = connected
+        socket.onDisconnect = disconnected
+        socket.onText = textReceived
+        socket.onData = binaryReceived
+
+        socket.connect()
     }
     
-    let baseUri : String = "http://192.168.0.5:8090"
+    func connected() {
+        logger.debug("connected!")
+        
+        let connect = Connect(id: 0, sessionId: "", deviceId: Settings.SELF.deviceId, networkType: "wifi")
+        socket.writeString(connect.jsonString)
+    }
+    
+    func disconnected(error: NSError?) {
+        
+    }
+    
+    func textReceived(text: String) {
+        logger.debug(text)
+    }
+    
+    func binaryReceived(data: NSData) {
+        
+    }
+    
+    func dispose() {
+        socket.disconnect()
+    }
     
     func register(device: Device?) {
         guard let device = device else {
@@ -28,7 +72,7 @@ class EddardGateway {
             return
         }
         
-        let request = NSMutableURLRequest(URL: NSURL(string: baseUri + "/device")!)
+        let request = NSMutableURLRequest(URL: NSURL(string: httpScheme + baseUri + "/device")!)
         
         request.HTTPMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -47,7 +91,7 @@ class EddardGateway {
     func getUsers(completionHandler: ([User]? -> Void)?) {
         let userId = Settings.SELF.userId;
         
-        Alamofire.request(.GET, "\(baseUri)/user/\(userId)/friend").responseString { response in
+        Alamofire.request(.GET, "\(httpScheme + baseUri)/user/\(userId)/friend").responseString { response in
 
             if let json = response.result.value {
                 if let users: Array<User> = Mapper<User>().mapArray(json) {

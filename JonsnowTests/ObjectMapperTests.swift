@@ -57,10 +57,21 @@ class ObjectMapperTests : XCTestCase {
         }
     }
     
-    func testToJson() {
+    func testToJson1() {
         let map = Map(mappingType: MappingType.FromJSON, JSONDictionary: ["receiverId": "testReceiverId", "isActive": true])
         let device = Device(map)
         
         logger.debug(Mapper().toJSONString(device!, prettyPrint: true))
+    }
+    
+    func testToJson2() {
+        let connect = Connect(id: 0, sessionId: "testSessionId", deviceId: "deviceTestId", networkType: "wifi")
+
+        
+        logger.debug(Mapper().toJSONString(connect, prettyPrint: true))
+        
+        let conResult = Mapper<Connect>().map(connect.jsonString)
+        
+        logger.debug(conResult?.jsonString)
     }
 }

@@ -33,6 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         
+        EddardGateway.SELF.initWebsocket()
+        
         var byteBuffer = [UInt8](count: deviceToken.length, repeatedValue: 0x00)
         deviceToken.getBytes(&byteBuffer, length: byteBuffer.count)
         
