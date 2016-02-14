@@ -11,103 +11,142 @@ import Foundation
 import Alamofire
 import ObjectMapper
 import Starscream
-
-typealias ServiceResponse = (JSON, NSError?) -> Void
+import SwiftyJSON
 
 class EddardGateway {
-    static let SELF: EddardGateway = EddardGateway()
+	static let SELF: EddardGateway = EddardGateway()
 
-    private let logger: Logger = Logger(className: "EddardGateway")
-    
-    private init() {
-        socket = WebSocket(url: NSURL(string: "ws://192.168.0.9:8090/websocket")!, protocols: ["smp_v1.0"])
-        
-        initWebsocket()
-    }
+	private let logger: Logger = Logger(className: "EddardGateway")
 
-    var socket : WebSocket
+	private init() {
+		socket = WebSocket(url: NSURL(string: websocketScheme + baseUri + websocketPath)!, protocols: ["smp_v1.0"])
 
-    let baseUri : String = "192.168.0.9:8090"
-    let httpScheme : String = "http://"
-    let websocketScheme : String = "ws://"
-    let websocketPath : String = "/websocket"
-    
-    func initWebsocket() {
-        logger.debug("initWebsocket called!")
-        
-        socket.onConnect = connected
-        socket.onDisconnect = disconnected
-        socket.onText = textReceived
-        socket.onData = binaryReceived
+		socket.queue = dispatch_queue_create("com.lge.stark.Jonsnow", nil)
+		socket.onConnect = connected
+		socket.onDisconnect = disconnected
+		socket.onText = textFrameReceived
+		socket.onData = binaryFrameReceived
+	}
 
-        socket.connect()
-    }
-    
-    func connected() {
-        logger.debug("connected!")
-        
-        let connect = Connect(id: 0, sessionId: "", deviceId: Settings.SELF.deviceId, networkType: "wifi")
-        socket.writeString(connect.jsonString)
-    }
-    
-    func disconnected(error: NSError?) {
-        
-    }
-    
-    func textReceived(text: String) {
-        logger.debug(text)
-    }
-    
-    func binaryReceived(data: NSData) {
-        
-    }
-    
-    func dispose() {
-        socket.disconnect()
-    }
-    
-    func register(device: Device?) {
-        guard let device = device else {
-            logger.error("device should not be nil")
-            return
-        }
-        
-        let request = NSMutableURLRequest(URL: NSURL(string: httpScheme + baseUri + "/device")!)
-        
-        request.HTTPMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.HTTPBody = (device.jsonString as NSString).dataUsingEncoding(NSUTF8StringEncoding)!
-        
-        Alamofire.request(request).response { response in
-            if let _ = response.1?.statusCode {
-                self.logger.debug(response.1?.description)
-            }
-            else {
-                self.logger.error(response.3?.description)
-            }
-        }
-    }
+	var socket : WebSocket
 
-    func getUsers(completionHandler: ([User]? -> Void)?) {
-        let userId = Settings.SELF.userId;
-        
-        Alamofire.request(.GET, "\(httpScheme + baseUri)/user/\(userId)/friend").responseString { response in
+	let baseUri : String = "192.168.0.9:8090"
+	let httpScheme : String = "http://"
+	let websocketScheme : String = "ws://"
+	let websocketPath : String = "/websocket"
 
-            if let json = response.result.value {
-                if let users: Array<User> = Mapper<User>().mapArray(json) {
-                    self.logger.debug(users[0].description)
+	var initializationLock = dispatch_semaphore_create(0)
+	let timeout = dispatch_time(DISPATCH_TIME_NOW, 100 * 1000 * 1000)
 
-                    completionHandler?(users)
-                }
-                else {
-                    self.logger.debug("nil!!")
+	var sessionId: String?
+	var heartbeatRateInSecond = -1
+	var onResGetFriends: ((users: Array<User>?) -> Void)?
 
-                    completionHandler?(nil)
-                }
-            }
-            else {
-                completionHandler?(nil)
-            }
-        }
-    }
+	func connect() {
+		if socket.isConnected || sessionId == nil {
+			sessionId = nil;
+			socket.disconnect();
+		}
+
+		socket.connect()
+
+		// TODO replace DISPATCH_TIME_FOREVER
+		dispatch_semaphore_wait(initializationLock, DISPATCH_TIME_FOREVER)
+	}
+
+	func connected() {
+		logger.debug("connected!")
+
+		let initialize = Smpframe.newJsonString(0, id: 0, sessionId: nil, fields: ["networkType": "wifi"])
+
+		socket.writeString(initialize!)
+	}
+
+	func disconnected(error: NSError?) {
+		sessionId = nil
+	}
+
+	func textFrameReceived(textFrame: String) {
+		logger.debug(textFrame)
+
+		// TODO invalid text handling...
+
+		let json = JSON(data: textFrame.dataUsingEncoding(NSUTF8StringEncoding)!);
+
+		switch json["opcode"].int16Value {
+		case 200:
+			onReturnOk(textFrame)
+		case 51:
+			onSetHeartbeatRate(json["sessionId"].stringValue, heartbeatRateInSecond: json["heartbeatRate"].intValue)
+		case 353:
+			onResGetFriends(json["users"].rawString()!)
+		default:
+			logger.error("invalid smpframe! \(textFrame)")
+		}
+	}
+
+	func onReturnOk(json: String) {
+		logger.debug("Retured OK : \(json)")
+	}
+
+	func onResGetFriends(usersJson: String) {
+		let users = Mapper<User>().mapArray(usersJson)
+		guard let handler = onResGetFriends else {
+			return;
+		}
+
+		handler(users: users)
+		onResGetFriends = nil
+	}
+
+	func onSetHeartbeatRate(sessionId: String, heartbeatRateInSecond: Int) {
+		self.sessionId = sessionId
+		self.heartbeatRateInSecond = heartbeatRateInSecond
+
+		// TODO set heartbeatrate handing..
+
+		dispatch_semaphore_signal(initializationLock)
+	}
+
+	func getFriends(completionHandler: ([User]? -> Void)) {
+		if isConnected == false {
+			logger.error("Session is not established!")
+			return;
+		}
+
+		onResGetFriends = completionHandler
+
+		let request = Smpframe.newJsonString(303, id: 0, sessionId: sessionId!, fields: ["userId": Settings.SELF.userId])
+
+		socket.writeString(request!)
+	}
+
+	func binaryFrameReceived(data: NSData) {
+	}
+
+	func dispose() {
+		socket.disconnect()
+	}
+
+	var isConnected: Bool {
+//		return sessionId != nil && socket.isConnected;
+		return sessionId != nil;
+	}
+
+	func register(device: Device?) {
+		if isConnected == false {
+			logger.error("Session is not established!")
+			return;
+		}
+
+		guard let device = device else {
+			logger.error("device should not be nil")
+			return
+		}
+
+		let deviceMap = Mapper().toJSON(device)
+		let request = Smpframe.newJsonString(300, id: 0, sessionId: sessionId!, fields: deviceMap)
+
+		socket.writeString(request!)
+	}
 }

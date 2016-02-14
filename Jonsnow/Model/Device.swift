@@ -13,7 +13,7 @@ class Device: Mappable {
     
     var deviceId: String
     var receiverId: String?
-    var type: String
+    var pushType: String
     var isActive: Bool?
     
     required convenience init?(_ map: Map) {
@@ -24,14 +24,14 @@ class Device: Mappable {
     
     init() {
         deviceId = "6b0b38f1-2934-4e6e-a852-4efb0203c6b6"
-        type = "APNS"
+        pushType = "APNS"
     }
     
     func mapping(map: Map) {
         deviceId    <- map["deviceId"]
         receiverId  <- map["receiverId"]
         isActive    <- map["isActive"]
-        type        <- map["type"]
+        pushType    <- map["pushType"]
     }
     
     var jsonString: String {

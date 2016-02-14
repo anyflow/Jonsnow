@@ -5,3 +5,4 @@ use_frameworks!
 pod 'Alamofire'
 pod 'ObjectMapper'
 pod 'Starscream'
+pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'

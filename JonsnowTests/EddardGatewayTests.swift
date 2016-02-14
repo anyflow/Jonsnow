@@ -23,9 +23,9 @@ class EddardGatewayTests: XCTestCase {
         super.tearDown()
     }
 
-    func testGetUsers() {
+    func testGetFriends() {
         let expectation = expectationWithDescription("Alamofire")
-        EddardGateway.SELF.getUsers { users in
+        EddardGateway.SELF.getFriends { users in
             
             self.logger.debug(users?[0].description)
             
