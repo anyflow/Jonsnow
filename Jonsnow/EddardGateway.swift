@@ -129,8 +129,7 @@ class EddardGateway {
 	}
 
 	var isConnected: Bool {
-//		return sessionId != nil && socket.isConnected;
-		return sessionId != nil;
+		return socket.isConnected && sessionId != nil;
 	}
 
 	func register(device: Device?) {

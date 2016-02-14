@@ -12,29 +12,26 @@ import Realm
 import RealmSwift
 
 class User: Object, Mappable {
-    dynamic var id: String?
-    dynamic var name: String?
-    dynamic var department: String?
-    dynamic var dummy: String?
-    //    dynamic var createDate: NSDate?
-    
-    required convenience init?(_ map: Map) {
-        self.init()
-    }
-    
-    func mapping(map: Map) {
-        id          <- map["id"]
-        name        <- map["name"]
-        department  <- map["description"]
-        dummy       <- map["friends"]
-        //        createDate  <- map["createDate"]
-    }
-    
-    override var description: String {
-        return "\r\n"
-            + "id           : \(id)\r\n"
-            + "name         : \(name)\r\n"
-            + "department   : \(department)\r\n"
-        //             + "createDate   : \(createDate)"
-    }
+	dynamic var id: String?
+	dynamic var name: String?
+	dynamic var department: String?
+	dynamic var dummy: String?
+
+	required convenience init?(_ map: Map) {
+		self.init()
+	}
+
+	func mapping(map: Map) {
+		id <- map["id"]
+		name <- map["name"]
+		department <- map["description"]
+		dummy <- map["friends"]
+	}
+
+	override var description: String {
+		return "\n"
+			+ "id           : \(id)\n"
+			+ "name         : \(name)\n"
+			+ "department   : \(department)"
+	}
 }

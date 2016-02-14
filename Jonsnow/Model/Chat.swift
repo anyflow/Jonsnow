@@ -29,10 +29,10 @@ class Chat: Object, Mappable {
     }
     
     override var description: String {
-        return "\r\n"
-            + "id           : \(id)\r\n"
-            + "creatorId    : \(creatorId)\r\n"
-            + "message      : \(message)\r\n"
+        return "\n"
+            + "id           : \(id)\n"
+            + "creatorId    : \(creatorId)\n"
+            + "message      : \(message)\n"
             + "createDate   : \(createDate)"
     }
 }
