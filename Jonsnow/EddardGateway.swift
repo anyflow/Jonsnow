@@ -40,7 +40,9 @@ class EddardGateway {
 
 	var sessionId: String?
 	var heartbeatRateInSecond = -1
-	var onResGetFriends: ((users: Array<User>?) -> Void)?
+    
+	var resGetFriendsHandler: ((users: Array<User>?) -> Void)?
+    var resCreateRoomHandler: (Room -> Void)?
 
 	func connect() {
 		if socket.isConnected || sessionId == nil {
@@ -80,6 +82,8 @@ class EddardGateway {
 			onSetHeartbeatRate(json["sessionId"].stringValue, heartbeatRateInSecond: json["heartbeatRate"].intValue)
 		case 353:
 			onResGetFriends(json["users"].rawString()!)
+        case 354:
+            onResGetFriends(json["users"].rawString()!)
 		default:
 			logger.error("invalid smpframe! \(textFrame)")
 		}
@@ -91,12 +95,12 @@ class EddardGateway {
 
 	func onResGetFriends(usersJson: String) {
 		let users = Mapper<User>().mapArray(usersJson)
-		guard let handler = onResGetFriends else {
+		guard let handler = resGetFriendsHandler else {
 			return;
 		}
 
 		handler(users: users)
-		onResGetFriends = nil
+		resGetFriendsHandler = nil
 	}
 
 	func onSetHeartbeatRate(sessionId: String, heartbeatRateInSecond: Int) {
@@ -114,12 +118,25 @@ class EddardGateway {
 			return;
 		}
 
-		onResGetFriends = completionHandler
+		resGetFriendsHandler = completionHandler
 
 		let request = Smpframe.newJsonString(303, id: 0, sessionId: sessionId!, fields: ["userId": Settings.SELF.userId])
 
 		socket.writeString(request!)
 	}
+    
+    func createRoom(name: String, inviteeIds: [String], secretKey: String, message: String, completionHandler: (Room -> Void)) {
+        if isConnected == false {
+            logger.error("Session is not established!")
+            return;
+        }
+        
+        resCreateRoomHandler = completionHandler
+        
+        let request = Smpframe.newJsonString(304, id: 0, sessionId: sessionId!, fields: ["name": name, "inviterId": Settings.SELF.userId, "inviteeIds": inviteeIds, "secretKey": secretKey, "message": message])
+        
+        socket.writeString(request!)
+    }
 
 	func binaryFrameReceived(data: NSData) {
 	}

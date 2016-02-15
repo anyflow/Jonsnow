@@ -45,13 +45,6 @@ class Smpframe: Mappable {
             dic[key] = value;
         }
         
-        do {
-            let jsonData = try NSJSONSerialization.dataWithJSONObject(dic, options: NSJSONWritingOptions.PrettyPrinted)
-            return NSString(data: jsonData, encoding: NSUTF8StringEncoding)! as String
-        }
-        catch let error as NSError {
-            logger.error(error.description)
-            return nil;
-        }
+        return Json.toJsonString(dic);
     }
 }
