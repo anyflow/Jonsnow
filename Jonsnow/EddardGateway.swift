@@ -30,7 +30,7 @@ class EddardGateway {
 
 	var socket : WebSocket
 
-	let baseUri : String = "192.168.0.9:8090"
+	let baseUri : String = "192.168.0.5:8090"
 	let httpScheme : String = "http://"
 	let websocketScheme : String = "ws://"
 	let websocketPath : String = "/websocket"
@@ -42,7 +42,7 @@ class EddardGateway {
 	var heartbeatRateInSecond = -1
     
 	var resGetFriendsHandler: ((users: Array<User>?) -> Void)?
-    var resCreateRoomHandler: (Room -> Void)?
+    var resCreateChannelHandler: (Channel -> Void)?
 
 	func connect() {
 		if socket.isConnected || sessionId == nil {
@@ -125,13 +125,13 @@ class EddardGateway {
 		socket.writeString(request!)
 	}
     
-    func createRoom(name: String, inviteeIds: [String], secretKey: String, message: String, completionHandler: (Room -> Void)) {
+    func createChannel(name: String, inviteeIds: [String], secretKey: String, message: String, completionHandler: (Channel -> Void)) {
         if isConnected == false {
             logger.error("Session is not established!")
             return;
         }
         
-        resCreateRoomHandler = completionHandler
+        resCreateChannelHandler = completionHandler
         
         let request = Smpframe.newJsonString(304, id: 0, sessionId: sessionId!, fields: ["name": name, "inviterId": Settings.SELF.userId, "inviteeIds": inviteeIds, "secretKey": secretKey, "message": message])
         

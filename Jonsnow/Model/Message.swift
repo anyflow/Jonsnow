@@ -11,10 +11,10 @@ import ObjectMapper
 import Realm
 import RealmSwift
 
-class Chat: Object, Mappable {
+class Message: Object, Mappable {
     dynamic var id: String?
     dynamic var creatorId: String?
-    dynamic var message: String?
+    dynamic var text: String?
     dynamic var createDate: NSDate?
     
     required convenience init?(_ map: Map) {
@@ -24,7 +24,7 @@ class Chat: Object, Mappable {
     func mapping(map: Map) {
         id          <- map["id"]
         creatorId   <- map["creatorId"]
-        message     <- map["message"]
+        text     <- map["text"]
         createDate  <- map["createDate"]
     }
     
@@ -32,7 +32,7 @@ class Chat: Object, Mappable {
         return "\n"
             + "id           : \(id)\n"
             + "creatorId    : \(creatorId)\n"
-            + "message      : \(message)\n"
+            + "text         : \(text)\n"
             + "createDate   : \(createDate)"
     }
 }

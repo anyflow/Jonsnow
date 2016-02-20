@@ -12,7 +12,7 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 
     let logger: Logger = Logger(className: SendMessageViewController.self.description())
     
-    var chats: [Chat] = []
+    var messages: [Message] = []
     
     @IBOutlet weak var bottomHeight: NSLayoutConstraint!
 
@@ -38,15 +38,15 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
     }
 
     @IBAction func send(sender: UIButton) {
-        let chat = Chat()
+        let message = Message()
         
-        chat.creatorId = "testId"
-        chat.message = textfieldMessage.text
-        chat.createDate = NSDate()
+        message.creatorId = "testId"
+        message.text = textfieldMessage.text
+        message.createDate = NSDate()
         
-        logger.debug(chat.message)
+        logger.debug(message.text)
         
-        chats += [chat]
+        messages += [message]
         
         tableviewChat.reloadData()
         
@@ -80,16 +80,16 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chats.count
+        return messages.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ChatCell", forIndexPath: indexPath) as! SendmessageTableViewCell
 
-        let chat = chats[indexPath.row] as Chat
-        cell.labelName.text = chat.creatorId
-        cell.labelSendDate.text = chat.createDate?.description
-        cell.textviewChat.text = chat.message
+        let message = messages[indexPath.row] as Message
+        cell.labelName.text = message.creatorId
+        cell.labelSendDate.text = message.createDate?.description
+        cell.textviewChat.text = message.text
         
         return cell
     }

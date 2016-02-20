@@ -20,13 +20,13 @@
 		6A5E998B1C1EFC700084E4B9 /* contacts.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A5E99871C1EFC700084E4B9 /* contacts.png */; };
 		6A5E998C1C1EFC700084E4B9 /* contacts@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A5E99881C1EFC700084E4B9 /* contacts@2x.png */; };
 		6A5E99931C1F108E0084E4B9 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5E99921C1F108E0084E4B9 /* Logger.swift */; };
-		6A8297461C4B965D0080316B /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8297451C4B965D0080316B /* Chat.swift */; };
+		6A8297461C4B965D0080316B /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8297451C4B965D0080316B /* Message.swift */; };
 		6A8297481C4B9B8E0080316B /* SendmessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8297471C4B9B8E0080316B /* SendmessageTableViewCell.swift */; };
 		6A8A57371C21F2B10082281F /* ObjectMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8A57361C21F2B10082281F /* ObjectMapperTests.swift */; };
 		6A8A57431C2657680082281F /* User.json in Resources */ = {isa = PBXBuildFile; fileRef = 6A8A57421C2657680082281F /* User.json */; };
 		6A9E99CC1C7265410013B002 /* Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9E99CB1C7265410013B002 /* Json.swift */; };
 		6AA563E71C2014D300730551 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA563E61C2014D300730551 /* User.swift */; };
-		6AA563E91C20154500730551 /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA563E81C20154500730551 /* Room.swift */; };
+		6AA563E91C20154500730551 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA563E81C20154500730551 /* Channel.swift */; };
 		6AB32BBD1C2FAF91003CDABC /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB32BBC1C2FAF91003CDABC /* Settings.swift */; };
 		6AB32BC11C2FDD9F003CDABC /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB32BC01C2FDD9F003CDABC /* Device.swift */; };
 		6AB4CDEF1C706EE400727F66 /* TestRest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB4CDEE1C706EE400727F66 /* TestRest.swift */; };
@@ -85,13 +85,13 @@
 		6A5E99881C1EFC700084E4B9 /* contacts@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contacts@2x.png"; sourceTree = "<group>"; };
 		6A5E998F1C1F09770084E4B9 /* Jonsnow-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Jonsnow-Bridging-Header.h"; sourceTree = "<group>"; };
 		6A5E99921C1F108E0084E4B9 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		6A8297451C4B965D0080316B /* Chat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
+		6A8297451C4B965D0080316B /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		6A8297471C4B9B8E0080316B /* SendmessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendmessageTableViewCell.swift; sourceTree = "<group>"; };
 		6A8A57361C21F2B10082281F /* ObjectMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectMapperTests.swift; sourceTree = "<group>"; };
 		6A8A57421C2657680082281F /* User.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = User.json; sourceTree = "<group>"; };
 		6A9E99CB1C7265410013B002 /* Json.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Json.swift; sourceTree = "<group>"; };
 		6AA563E61C2014D300730551 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		6AA563E81C20154500730551 /* Room.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
+		6AA563E81C20154500730551 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		6AB32BBC1C2FAF91003CDABC /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		6AB32BC01C2FDD9F003CDABC /* Device.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		6AB4CDEE1C706EE400727F66 /* TestRest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestRest.swift; sourceTree = "<group>"; };
@@ -215,9 +215,9 @@
 			children = (
 				6AB4CDF01C70873A00727F66 /* Smpframe.swift */,
 				6AA563E61C2014D300730551 /* User.swift */,
-				6AA563E81C20154500730551 /* Room.swift */,
+				6AA563E81C20154500730551 /* Channel.swift */,
 				6AB32BC01C2FDD9F003CDABC /* Device.swift */,
-				6A8297451C4B965D0080316B /* Chat.swift */,
+				6A8297451C4B965D0080316B /* Message.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -421,10 +421,10 @@
 				6AB4CDEF1C706EE400727F66 /* TestRest.swift in Sources */,
 				6A4A9A901BFE22250078BFC3 /* Jonsnow.xcdatamodeld in Sources */,
 				6AA563E71C2014D300730551 /* User.swift in Sources */,
-				6AA563E91C20154500730551 /* Room.swift in Sources */,
+				6AA563E91C20154500730551 /* Channel.swift in Sources */,
 				6A4A9A881BFE22250078BFC3 /* AppDelegate.swift in Sources */,
 				6A8297481C4B9B8E0080316B /* SendmessageTableViewCell.swift in Sources */,
-				6A8297461C4B965D0080316B /* Chat.swift in Sources */,
+				6A8297461C4B965D0080316B /* Message.swift in Sources */,
 				6AC5C8841C2046EE00B1DB17 /* FriendTableViewController.swift in Sources */,
 				6AB4CDF11C70873A00727F66 /* Smpframe.swift in Sources */,
 				6AF9C5951C4B28E800CB203F /* SendMessageViewController.swift in Sources */,

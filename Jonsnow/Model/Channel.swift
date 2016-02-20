@@ -9,11 +9,11 @@
 import Foundation
 import ObjectMapper
 
-class Room: Mappable {
+class Channel: Mappable {
 
 	var id: String?
 	var isActive: Bool?
-	var chats: [Chat]?
+	var messages: [Message]?
 	var createDate: NSDate?
 
 	required convenience init?(_ map: Map) {
@@ -28,7 +28,7 @@ class Room: Mappable {
 	func mapping(map: Map) {
 		id <- map["id"]
 		isActive <- map["isActive"]
-		chats <- map["chats"]
+		messages <- map["messages"]
 		createDate <- map["createDate"]
 	}
 
