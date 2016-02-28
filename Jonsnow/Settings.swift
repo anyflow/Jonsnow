@@ -24,12 +24,16 @@ class Settings: Object {
     
     var deviceId: String = UIDevice.currentDevice().identifierForVendor!.UUIDString
     let userId:String = "37cd2cd5-0a1e-4641-9f5e-6096b16b64d5"
-
     
     required init() {
         super.init()
     
         load()
+    }
+    
+    func networkType() -> String {
+        //TODO getNetworkType
+        return "wifi"
     }
     
     func save() {
@@ -46,7 +50,6 @@ class Settings: Object {
     }
     
     private func load() {
-
         if let db = self.realm?.objects(Settings).first {
             if let deviceToken = db.deviceToken {
                 self.deviceToken = deviceToken

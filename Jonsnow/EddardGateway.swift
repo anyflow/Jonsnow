@@ -30,7 +30,7 @@ class EddardGateway {
 
 	var socket : WebSocket
 
-	let baseUri : String = "192.168.0.5:8090"
+	let baseUri : String = "anyflow.iptime.org:8090"
 	let httpScheme : String = "http://"
 	let websocketScheme : String = "ws://"
 	let websocketPath : String = "/websocket"
@@ -40,9 +40,12 @@ class EddardGateway {
 
 	var sessionId: String?
 	var heartbeatRateInSecond = -1
-    
+
 	var resGetFriendsHandler: ((users: Array<User>?) -> Void)?
-    var resCreateChannelHandler: (Channel -> Void)?
+	var resCreateChannelHandler: (Channel? -> Void)?
+	var resCreateMessageHandler: (Message? -> Void)?
+    var channels: [Channel] = []
+
 
 	func connect() {
 		if socket.isConnected || sessionId == nil {
@@ -59,7 +62,7 @@ class EddardGateway {
 	func connected() {
 		logger.debug("connected!")
 
-		let initialize = Smpframe.newJsonString(0, id: 0, sessionId: nil, fields: ["networkType": "wifi"])
+		let initialize = Smpframe.newJsonString(0, id: 0, sessionId: nil, fields: ["deviceId":Settings.SELF.deviceId, "networkType": Settings.SELF.networkType()])
 
 		socket.writeString(initialize!)
 	}
@@ -69,6 +72,8 @@ class EddardGateway {
 	}
 
 	func textFrameReceived(textFrame: String) {
+        dispatch_semaphore_signal(initializationLock)
+        
 		logger.debug(textFrame)
 
 		// TODO invalid text handling...
@@ -81,20 +86,43 @@ class EddardGateway {
 		case 51:
 			onSetHeartbeatRate(json["sessionId"].stringValue, heartbeatRateInSecond: json["heartbeatRate"].intValue)
 		case 353:
-			onResGetFriends(json["users"].rawString()!)
-        case 354:
-            onResGetFriends(json["users"].rawString()!)
+			let users = Mapper<User>().mapArray(json["users"].rawString()!)
+			onResGetFriends(users)
+		case 354:
+			let channel = Mapper<Channel>().map(json["channel"].rawString())
+			onResCreateChannel(channel)
+        case 355:
+            let message = Mapper<Message>().map(json["message"].rawString())!
+            onMessageCreated(message)
+		case 160:
+			onErrorStarkService(json["code"].stringValue, description: json["description"].rawString()!)
 		default:
 			logger.error("invalid smpframe! \(textFrame)")
 		}
+	}
+
+    func onMessageCreated(message: Message) {
+        for channel in channels {
+            if(channel.id != message.channelId) { continue }
+            
+            if(channel.messageReceived == nil) { continue; }
+            
+            channel.messageReceived!(message: message)
+            return
+        }
+    }
+    
+	func onErrorStarkService(code: String, description: String) {
+		logger.debug("onErrorStarkService : \(code) | \(description)")
+
+		// TODO onErrorStarkService
 	}
 
 	func onReturnOk(json: String) {
 		logger.debug("Retured OK : \(json)")
 	}
 
-	func onResGetFriends(usersJson: String) {
-		let users = Mapper<User>().mapArray(usersJson)
+	func onResGetFriends(users: [User]?) {
 		guard let handler = resGetFriendsHandler else {
 			return;
 		}
@@ -103,13 +131,22 @@ class EddardGateway {
 		resGetFriendsHandler = nil
 	}
 
+	func onResCreateChannel(channel: Channel?) {
+		guard let handler = resCreateChannelHandler else {
+			return;
+		}
+
+		handler(channel)
+		resCreateChannelHandler = nil
+	}
+
 	func onSetHeartbeatRate(sessionId: String, heartbeatRateInSecond: Int) {
 		self.sessionId = sessionId
 		self.heartbeatRateInSecond = heartbeatRateInSecond
 
 		// TODO set heartbeatrate handing..
 
-		dispatch_semaphore_signal(initializationLock)
+
 	}
 
 	func getFriends(completionHandler: ([User]? -> Void)) {
@@ -124,19 +161,30 @@ class EddardGateway {
 
 		socket.writeString(request!)
 	}
-    
-    func createChannel(name: String, inviteeIds: [String], secretKey: String, message: String, completionHandler: (Channel -> Void)) {
-        if isConnected == false {
-            logger.error("Session is not established!")
-            return;
-        }
-        
-        resCreateChannelHandler = completionHandler
-        
-        let request = Smpframe.newJsonString(304, id: 0, sessionId: sessionId!, fields: ["name": name, "inviterId": Settings.SELF.userId, "inviteeIds": inviteeIds, "secretKey": secretKey, "message": message])
-        
-        socket.writeString(request!)
-    }
+
+	func createChannel(name: String, inviteeIds: [String], secretKey: String, completionHandler: (Channel? -> Void)) {
+		if isConnected == false {
+			logger.error("Session is not established!")
+			return;
+		}
+
+		resCreateChannelHandler = completionHandler
+
+		let request = Smpframe.newJsonString(304, id: 0, sessionId: sessionId!, fields: ["name": name, "inviterId": Settings.SELF.userId, "inviteeIds": inviteeIds, "secretKey": secretKey])
+
+		socket.writeString(request!)
+	}
+
+	func createMessage(channelId: String, text: String) {
+		if isConnected == false {
+			logger.error("Session is not established!")
+			return;
+		}
+
+		let request = Smpframe.newJsonString(305, id: 0, sessionId: sessionId!, fields: ["channelId": channelId, "creatorId": Settings.SELF.userId, "text": text])
+
+		socket.writeString(request!)
+	}
 
 	func binaryFrameReceived(data: NSData) {
 	}

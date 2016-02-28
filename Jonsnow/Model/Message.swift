@@ -12,27 +12,33 @@ import Realm
 import RealmSwift
 
 class Message: Object, Mappable {
-    dynamic var id: String?
-    dynamic var creatorId: String?
-    dynamic var text: String?
-    dynamic var createDate: NSDate?
-    
-    required convenience init?(_ map: Map) {
-        self.init()
-    }
-    
-    func mapping(map: Map) {
-        id          <- map["id"]
-        creatorId   <- map["creatorId"]
-        text     <- map["text"]
-        createDate  <- map["createDate"]
-    }
-    
-    override var description: String {
-        return "\n"
-            + "id           : \(id)\n"
-            + "creatorId    : \(creatorId)\n"
-            + "text         : \(text)\n"
-            + "createDate   : \(createDate)"
-    }
+	var id: String?
+	var channelId: String?
+	var creatorId: String?
+	var text: String?
+	var createDate: NSDate?
+	var unreadCount: Int?
+
+	required convenience init?(_ map: Map) {
+		self.init()
+	}
+
+	func mapping(map: Map) {
+		id <- map["id"]
+		channelId <- map["channelId"]
+		creatorId <- map["creatorId"]
+		text <- map["text"]
+		createDate <- map["createDate"]
+		unreadCount <- map["unreadCount"]
+	}
+
+	override var description: String {
+		return "\n"
+			+ "id           : \(id)\n"
+			+ "channelId    : \(channelId)"
+			+ "creatorId    : \(creatorId)\n"
+			+ "text         : \(text)\n"
+			+ "createDate   : \(createDate)"
+			+ "unreadCount  : \(unreadCount)"
+	}
 }

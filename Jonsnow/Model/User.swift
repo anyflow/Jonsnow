@@ -25,7 +25,7 @@ class User: Object, Mappable {
 		id <- map["id"]
 		name <- map["name"]
 		department <- map["description"]
-		dummy <- map["friends"]
+		dummy <- map["friendIds"]
 	}
 
 	override var description: String {

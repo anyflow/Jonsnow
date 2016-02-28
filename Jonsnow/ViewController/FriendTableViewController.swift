@@ -12,7 +12,7 @@ class FriendTableViewController: UITableViewController {
 
 	let logger: Logger = Logger(className: FriendTableViewController.self.description())
 
-	var users: [User]?
+	var users: [User] = []
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -34,7 +34,7 @@ class FriendTableViewController: UITableViewController {
 				self.logger.debug(user.description)
 			}
 
-			self.users = users
+			self.users.appendContentsOf(users)
 
 			self.tableView.performSelectorOnMainThread(Selector("reloadData"), withObject: nil, waitUntilDone: true)
 		}
@@ -51,20 +51,11 @@ class FriendTableViewController: UITableViewController {
 	}
 
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-		guard let users = self.users else {
-			return 0
-		}
-
 		return users.count
 	}
 
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCellWithIdentifier("FriendCell", forIndexPath: indexPath)
-
-		guard let users = self.users else {
-			return cell
-		}
 
 		let user = users[indexPath.row] as User
 		cell.textLabel?.text = user.name
@@ -72,6 +63,18 @@ class FriendTableViewController: UITableViewController {
 
 		return cell
 	}
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        guard let selectedRow = self.tableView.indexPathForSelectedRow else {
+            return;
+        }
+        
+        let selectedUser = users[selectedRow.row]
+    
+        let target = (segue.destinationViewController as! UINavigationController).topViewController as! SendMessageViewController
+        target.users.append(selectedUser)
+    }
 
 	/*
 	 // Override to support conditional editing of the table view.
@@ -108,13 +111,5 @@ class FriendTableViewController: UITableViewController {
 	 }
 	 */
 
-	/*
-	 // MARK: - Navigation
 
-	 // In a storyboard-based application, you will often want to do a little preparation before navigation
-	 override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-	 // Get the new view controller using segue.destinationViewController.
-	 // Pass the selected object to the new view controller.
-	 }
-	 */
 }

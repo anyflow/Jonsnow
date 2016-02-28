@@ -12,9 +12,14 @@ import ObjectMapper
 class Channel: Mappable {
 
 	var id: String?
-	var isActive: Bool?
-	var messages: [Message]?
+	var name: String?
+	var secretKey: String?
+	var userIds: [String]?
 	var createDate: NSDate?
+
+	var messageReceived: ((message: Message) -> Void)?
+
+	private var timeInterval: Double = 0
 
 	required convenience init?(_ map: Map) {
 		self.init()
@@ -27,9 +32,12 @@ class Channel: Mappable {
 
 	func mapping(map: Map) {
 		id <- map["id"]
-		isActive <- map["isActive"]
-		messages <- map["messages"]
-		createDate <- map["createDate"]
+		name <- map["name"]
+		secretKey <- map["secretKey"]
+		userIds <- map["userIds"]
+		timeInterval <- map["createDate"]
+
+		createDate = NSDate(timeIntervalSince1970: timeInterval)
 	}
 
 	var jsonString: String {
