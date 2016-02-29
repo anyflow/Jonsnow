@@ -148,7 +148,12 @@ class EddardGateway {
 
 
 	}
-
+    func sendMesssageReceived(channelId: String, messageId: String) {
+        let request = Smpframe.newJsonString(307, id: 0, sessionId: sessionId!, fields: ["messageId": messageId])
+        
+        socket.writeString(request!)
+    }
+    
 	func getFriends(completionHandler: ([User]? -> Void)) {
 		if isConnected == false {
 			logger.error("Session is not established!")

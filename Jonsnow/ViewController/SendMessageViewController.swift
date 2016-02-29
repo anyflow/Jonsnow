@@ -41,16 +41,16 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 
 			self.channel = channel
             EddardGateway.SELF.channels.append(channel)
-			self.channel!.messageReceived = self.messageReceived
+            self.channel!.messageReceived = { message in
+                self.logger.debug(message.text)
+                
+                self.messages += [message]
+                
+                EddardGateway.SELF.sendMesssageReceived(self.channel!.id!, messageId: message.id!)
+                
+                self.tableviewChat.performSelectorOnMainThread(Selector("reloadData"), withObject: nil, waitUntilDone: true)
+            }
 		})
-	}
-
-	func messageReceived(message: Message) {
-		logger.debug(message.text)
-
-		messages += [message]
-
-		self.tableviewChat.performSelectorOnMainThread(Selector("reloadData"), withObject: nil, waitUntilDone: true)
 	}
     
 	override func didReceiveMemoryWarning() {
