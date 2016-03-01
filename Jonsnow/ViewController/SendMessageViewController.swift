@@ -33,6 +33,8 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 
 		if users.count <= 0 { return; }
 
+        users.append(Settings.SELF.myProfile!)
+        
 		EddardGateway.SELF.createChannel("Shoud be changed!!", inviteeIds: [users[0].id!], secretKey: "someSecretKey", completionHandler: { channel in
 			guard let channel = channel else {
 				// TOOD error handling
@@ -40,19 +42,19 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 			}
 
 			self.channel = channel
-            EddardGateway.SELF.channels.append(channel)
-            self.channel!.messageReceived = { message in
-                self.logger.debug(message.text)
-                
-                self.messages += [message]
-                
-                EddardGateway.SELF.sendMesssageReceived(self.channel!.id!, messageId: message.id!)
-                
-                self.tableviewChat.performSelectorOnMainThread(Selector("reloadData"), withObject: nil, waitUntilDone: true)
-            }
+			EddardGateway.SELF.channels.append(channel)
+			self.channel!.messageReceived = { message in
+				self.logger.debug(message.text)
+
+				self.messages += [message]
+
+				EddardGateway.SELF.sendMesssageReceived(self.channel!.id!, messageId: message.id!)
+
+				self.tableviewChat.performSelectorOnMainThread(Selector("reloadData"), withObject: nil, waitUntilDone: true)
+			}
 		})
 	}
-    
+
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
@@ -103,7 +105,11 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 		let cell = tableView.dequeueReusableCellWithIdentifier("ChatCell", forIndexPath: indexPath) as! SendmessageTableViewCell
 
 		let message = messages[indexPath.row] as Message
-		cell.labelName.text = message.creatorId
+		let filteredUsers = users.filter({ user in
+            return user.id == message.creatorId
+        })
+
+		cell.labelName.text = filteredUsers[0].name
 		cell.labelSendDate.text = message.createDate?.description
 		cell.textviewChat.text = message.text
 

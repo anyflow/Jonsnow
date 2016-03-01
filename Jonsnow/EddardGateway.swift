@@ -41,12 +41,14 @@ class EddardGateway {
 	var sessionId: String?
 	var heartbeatRateInSecond = -1
 
-	var resGetFriendsHandler: ((users: Array<User>?) -> Void)?
+    var usersRetrievedHandlers: [Int: ((users: Array<User>?) -> Void)] = [:]
 	var resCreateChannelHandler: (Channel? -> Void)?
 	var resCreateMessageHandler: (Message? -> Void)?
     var channels: [Channel] = []
+    var pushframeId: Int = -1
 
-
+    private func nextPushframeId() -> Int { return pushframeId++; }
+    
 	func connect() {
 		if socket.isConnected || sessionId == nil {
 			sessionId = nil;
@@ -62,7 +64,7 @@ class EddardGateway {
 	func connected() {
 		logger.debug("connected!")
 
-		let initialize = Smpframe.newJsonString(0, id: 0, sessionId: nil, fields: ["deviceId":Settings.SELF.deviceId, "networkType": Settings.SELF.networkType()])
+		let initialize = Smpframe.newJsonString(0, id: nextPushframeId(), sessionId: nil, fields: ["deviceId":Settings.SELF.deviceId, "networkType": Settings.SELF.networkType()])
 
 		socket.writeString(initialize!)
 	}
@@ -72,8 +74,6 @@ class EddardGateway {
 	}
 
 	func textFrameReceived(textFrame: String) {
-        dispatch_semaphore_signal(initializationLock)
-        
 		logger.debug(textFrame)
 
 		// TODO invalid text handling...
@@ -87,7 +87,8 @@ class EddardGateway {
 			onSetHeartbeatRate(json["sessionId"].stringValue, heartbeatRateInSecond: json["heartbeatRate"].intValue)
 		case 353:
 			let users = Mapper<User>().mapArray(json["users"].rawString()!)
-			onResGetFriends(users)
+            let smpframeId = json["pushframeId"].intValue
+            onUsersRetrieved(smpframeId, users: users)
 		case 354:
 			let channel = Mapper<Channel>().map(json["channel"].rawString())
 			onResCreateChannel(channel)
@@ -112,26 +113,28 @@ class EddardGateway {
         }
     }
     
-	func onErrorStarkService(code: String, description: String) {
+	private func onErrorStarkService(code: String, description: String) {
 		logger.debug("onErrorStarkService : \(code) | \(description)")
 
 		// TODO onErrorStarkService
 	}
 
-	func onReturnOk(json: String) {
+	private func onReturnOk(json: String) {
 		logger.debug("Retured OK : \(json)")
 	}
 
-	func onResGetFriends(users: [User]?) {
-		guard let handler = resGetFriendsHandler else {
+    private func onUsersRetrieved(smpframeId: Int, users: [User]?) {
+        let requestPushframeId = smpframeId - 1
+        
+		guard let handler = usersRetrievedHandlers[requestPushframeId] else {
 			return;
 		}
 
 		handler(users: users)
-		resGetFriendsHandler = nil
-	}
+		usersRetrievedHandlers.removeValueForKey(requestPushframeId)
+    }
 
-	func onResCreateChannel(channel: Channel?) {
+	private func onResCreateChannel(channel: Channel?) {
 		guard let handler = resCreateChannelHandler else {
 			return;
 		}
@@ -140,16 +143,42 @@ class EddardGateway {
 		resCreateChannelHandler = nil
 	}
 
-	func onSetHeartbeatRate(sessionId: String, heartbeatRateInSecond: Int) {
+	private func onSetHeartbeatRate(sessionId: String, heartbeatRateInSecond: Int) {
 		self.sessionId = sessionId
 		self.heartbeatRateInSecond = heartbeatRateInSecond
 
+        dispatch_semaphore_signal(initializationLock)
 		// TODO set heartbeatrate handing..
-
-
 	}
+    
     func sendMesssageReceived(channelId: String, messageId: String) {
-        let request = Smpframe.newJsonString(307, id: 0, sessionId: sessionId!, fields: ["messageId": messageId])
+        let request = Smpframe.newJsonString(307, id: nextPushframeId(), sessionId: sessionId!, fields: ["messageId": messageId])
+        
+        socket.writeString(request!)
+    }
+    
+    func getMyProfile(completionHandler: (User -> Void)) {
+        if isConnected == false {
+            logger.error("Session is not established!")
+            return;
+        }
+        
+        let pushframeId = nextPushframeId()
+        usersRetrievedHandlers[pushframeId] = { users in
+            guard let users = users else {
+                //TODO error handling
+                return
+            }
+            
+            if users.count <= 0 {
+                //TODO error handling
+                return
+            }
+            
+            completionHandler(users[0])
+        }
+        
+        let request = Smpframe.newJsonString(308, id: pushframeId, sessionId: sessionId!, fields: ["userIds": [Settings.SELF.userId]])
         
         socket.writeString(request!)
     }
@@ -160,9 +189,10 @@ class EddardGateway {
 			return;
 		}
 
-		resGetFriendsHandler = completionHandler
+        let pushframeId = nextPushframeId()
+		usersRetrievedHandlers[pushframeId] = completionHandler
 
-		let request = Smpframe.newJsonString(303, id: 0, sessionId: sessionId!, fields: ["userId": Settings.SELF.userId])
+		let request = Smpframe.newJsonString(303, id: pushframeId, sessionId: sessionId!, fields: ["userId": Settings.SELF.userId])
 
 		socket.writeString(request!)
 	}
@@ -175,7 +205,7 @@ class EddardGateway {
 
 		resCreateChannelHandler = completionHandler
 
-		let request = Smpframe.newJsonString(304, id: 0, sessionId: sessionId!, fields: ["name": name, "inviterId": Settings.SELF.userId, "inviteeIds": inviteeIds, "secretKey": secretKey])
+		let request = Smpframe.newJsonString(304, id: nextPushframeId(), sessionId: sessionId!, fields: ["name": name, "inviterId": Settings.SELF.userId, "inviteeIds": inviteeIds, "secretKey": secretKey])
 
 		socket.writeString(request!)
 	}
@@ -186,12 +216,12 @@ class EddardGateway {
 			return;
 		}
 
-		let request = Smpframe.newJsonString(305, id: 0, sessionId: sessionId!, fields: ["channelId": channelId, "creatorId": Settings.SELF.userId, "text": text])
+		let request = Smpframe.newJsonString(305, id: nextPushframeId(), sessionId: sessionId!, fields: ["channelId": channelId, "creatorId": Settings.SELF.userId, "text": text])
 
 		socket.writeString(request!)
 	}
 
-	func binaryFrameReceived(data: NSData) {
+	private func binaryFrameReceived(data: NSData) {
 	}
 
 	func dispose() {
@@ -214,7 +244,7 @@ class EddardGateway {
 		}
 
 		let deviceMap = Mapper().toJSON(device)
-		let request = Smpframe.newJsonString(300, id: 0, sessionId: sessionId!, fields: deviceMap)
+		let request = Smpframe.newJsonString(300, id: nextPushframeId(), sessionId: sessionId!, fields: deviceMap)
 
 		socket.writeString(request!)
 	}
