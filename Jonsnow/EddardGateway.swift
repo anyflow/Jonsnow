@@ -85,7 +85,9 @@ class EddardGateway {
 			onReturnOk(textFrame)
 		case 51:
 			onSetHeartbeatRate(json["sessionId"].stringValue, heartbeatRateInSecond: json["heartbeatRate"].intValue)
-		case 353:
+        case 160:
+            onErrorStarkService(json["code"].stringValue, description: json["description"].rawString()!)
+        case 353:
 			let users = Mapper<User>().mapArray(json["users"].rawString()!)
             let smpframeId = json["pushframeId"].intValue
             onUsersRetrieved(smpframeId, users: users)
@@ -95,13 +97,26 @@ class EddardGateway {
         case 355:
             let message = Mapper<Message>().map(json["message"].rawString())!
             onMessageCreated(message)
-		case 160:
-			onErrorStarkService(json["code"].stringValue, description: json["description"].rawString()!)
+        case 357:
+            let channelId = json["channelId"].stringValue
+            let messageId = json["messageId"].stringValue
+            onUnreadCountChanged(channelId, messageId: messageId)
 		default:
 			logger.error("invalid smpframe! \(textFrame)")
 		}
 	}
 
+    func onUnreadCountChanged(channelId: String, messageId: String) {
+        for channel in channels {
+            if(channel.id != channelId) { continue }
+            
+            guard let unreadCountChanged = channel.unreadCountChanged else { return }
+            
+            unreadCountChanged(messageId: messageId)
+            return
+        }
+    }
+    
     func onMessageCreated(message: Message) {
         for channel in channels {
             if(channel.id != message.channelId) { continue }

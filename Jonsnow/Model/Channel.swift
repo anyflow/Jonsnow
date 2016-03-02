@@ -18,7 +18,8 @@ class Channel: Mappable {
 	var createDate: NSDate?
 
 	var messageReceived: ((message: Message) -> Void)?
-
+    var unreadCountChanged: ((messageId: String) -> Void)?
+    
 	private var timeInterval: Double = 0
 
 	required convenience init?(_ map: Map) {

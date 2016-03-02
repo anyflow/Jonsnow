@@ -33,8 +33,8 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 
 		if users.count <= 0 { return; }
 
-        users.append(Settings.SELF.myProfile!)
-        
+		users.append(Settings.SELF.myProfile!)
+
 		EddardGateway.SELF.createChannel("Shoud be changed!!", inviteeIds: [users[0].id!], secretKey: "someSecretKey", completionHandler: { channel in
 			guard let channel = channel else {
 				// TOOD error handling
@@ -42,14 +42,26 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 			}
 
 			self.channel = channel
+
 			EddardGateway.SELF.channels.append(channel)
-			self.channel!.messageReceived = { message in
+
+			channel.messageReceived = { message in
 				self.logger.debug(message.text)
 
 				self.messages += [message]
 
-				EddardGateway.SELF.sendMesssageReceived(self.channel!.id!, messageId: message.id!)
+				EddardGateway.SELF.sendMesssageReceived(channel.id!, messageId: message.id!)
 
+				self.tableviewChat.performSelectorOnMainThread(Selector("reloadData"), withObject: nil, waitUntilDone: true)
+			}
+
+			channel.unreadCountChanged = { messageId in
+                let messages = self.messages.filter({ message in return message.id == messageId })
+                
+                if messages.count <= 0 { return }
+                
+                messages[0].unreadCount! -= 1
+                
 				self.tableviewChat.performSelectorOnMainThread(Selector("reloadData"), withObject: nil, waitUntilDone: true)
 			}
 		})
@@ -106,10 +118,10 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 
 		let message = messages[indexPath.row] as Message
 		let filteredUsers = users.filter({ user in
-            return user.id == message.creatorId
-        })
+			return user.id == message.creatorId
+		})
 
-		cell.labelName.text = filteredUsers[0].name
+		cell.labelName.text = "\(filteredUsers[0].name) | \(message.unreadCount!)"
 		cell.labelSendDate.text = message.createDate?.description
 		cell.textviewChat.text = message.text
 

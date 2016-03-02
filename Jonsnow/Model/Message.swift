@@ -28,8 +28,22 @@ class Message: Object, Mappable {
 		channelId <- map["channelId"]
 		creatorId <- map["creatorId"]
 		text <- map["text"]
-		createDate <- map["createDate"]
 		unreadCount <- map["unreadCount"]
+        
+        let transform = TransformOf<NSDate, Double>(fromJSON: { (value: Double?) -> NSDate? in
+            guard let value = value else {
+                return nil
+            }
+            
+            return NSDate(timeIntervalSince1970: value)
+            }, toJSON: { (value: NSDate?) -> Double? in
+                guard let value = value else {
+                    return 0
+                }
+                return value.timeIntervalSince1970
+        })
+        
+        createDate <- (map["createDate"], transform)
 	}
 
 	override var description: String {
