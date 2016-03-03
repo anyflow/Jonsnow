@@ -30,17 +30,17 @@ class Message: Object, Mappable {
 		text <- map["text"]
 		unreadCount <- map["unreadCount"]
         
-        let transform = TransformOf<NSDate, Double>(fromJSON: { (value: Double?) -> NSDate? in
+        let transform = TransformOf<NSDate, Int>(fromJSON: { (value: Int?) -> NSDate? in
             guard let value = value else {
                 return nil
             }
             
-            return NSDate(timeIntervalSince1970: value)
-            }, toJSON: { (value: NSDate?) -> Double? in
+            return NSDate(timeIntervalSince1970: (Double)(value / 1000))
+            }, toJSON: { (value: NSDate?) -> Int? in
                 guard let value = value else {
                     return 0
                 }
-                return value.timeIntervalSince1970
+                return (Int)(value.timeIntervalSince1970 * 1000)
         })
         
         createDate <- (map["createDate"], transform)
@@ -55,4 +55,12 @@ class Message: Object, Mappable {
 			+ "createDate   : \(createDate)"
 			+ "unreadCount  : \(unreadCount)"
 	}
+}
+
+extension NSDate {
+    func dateStringWithFormat(format: String) -> String {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.stringFromDate(self)
+    }
 }
