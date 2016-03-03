@@ -121,7 +121,7 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 			return user.id == message.creatorId
 		})
 
-		cell.labelName.text = "\(filteredUsers[0].name) | \(message.unreadCount!)"
+		cell.labelName.text = "\(filteredUsers[0].name!) | \(message.unreadCount!)"
 		cell.labelSendDate.text = message.createDate?.description
 		cell.textviewChat.text = message.text
 
