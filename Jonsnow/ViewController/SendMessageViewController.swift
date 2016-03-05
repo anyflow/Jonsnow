@@ -22,14 +22,20 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 
 	@IBOutlet weak var tableviewChat: UITableView!
 
+	var refreshControl: UIRefreshControl = UIRefreshControl()
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name: UIKeyboardWillShowNotification, object: nil)
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name: UIKeyboardWillHideNotification, object: nil)
 
+		refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+		refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+
 		tableviewChat.dataSource = self
 		tableviewChat.autoresizingMask = .FlexibleHeight
+		tableviewChat.addSubview(refreshControl)
 
 		if users.count <= 0 { return; }
 
@@ -56,14 +62,29 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 			}
 
 			channel.unreadCountChanged = { messageId in
-                let messages = self.messages.filter({ message in return message.id == messageId })
-                
-                if messages.count <= 0 { return }
-                
-                messages[0].unreadCount! -= 1
-                
+				let messages = self.messages.filter({ message in return message.id == messageId})
+
+				if messages.count <= 0 { return }
+
+				messages[0].unreadCount! -= 1
+
 				self.tableviewChat.performSelectorOnMainThread(Selector("reloadData"), withObject: nil, waitUntilDone: true)
 			}
+		})
+	}
+
+	func refresh(sender: AnyObject) {
+		guard let channelId = channel?.id else {
+			return
+		}
+
+		self.messages.removeAll()
+
+		EddardGateway.SELF.retrieveMessages(channelId, completionHandler: { messages -> Void in
+			self.messages += messages
+
+			self.tableviewChat.performSelectorOnMainThread(Selector("reloadData"), withObject: nil, waitUntilDone: true)
+			self.refreshControl.performSelectorOnMainThread(Selector("endRefreshing"), withObject: nil, waitUntilDone: true)
 		})
 	}
 
@@ -121,7 +142,7 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 			return user.id == message.creatorId
 		})
 
-		cell.labelName.text = "\(filteredUsers[0].name!) | \(message.createDate!.dateStringWithFormat("yyyy-MM-dd HH:mm:ss"))"
+		cell.labelName.text = "\(filteredUsers[0].name!) | \(message.createDate!.dateStringWithFormat("yyyy - MM - dd HH: mm: ss"))"
 		cell.labelSendDate.text = message.unreadCount!.description
 		cell.textviewChat.text = message.text
 

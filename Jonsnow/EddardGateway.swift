@@ -41,14 +41,19 @@ class EddardGateway {
 	var sessionId: String?
 	var heartbeatRateInSecond = -1
 
-    var usersRetrievedHandlers: [Int: ((users: Array<User>?) -> Void)] = [:]
+	var usersRetrievedHandlers: [Int: ((users: Array<User>?) -> Void)] = [:]
 	var resCreateChannelHandler: (Channel? -> Void)?
 	var resCreateMessageHandler: (Message? -> Void)?
-    var channels: [Channel] = []
-    var pushframeId: Int = -1
+	var resRetrieveMessagesHandler: ([Message] -> Void)?
 
-    private func nextPushframeId() -> Int { return pushframeId++; }
-    
+	var channels: [Channel] = []
+	var pushframeId: Int = -1
+
+	private func nextPushframeId() -> Int { return pushframeId++; }
+
+	private func binaryFrameReceived(data: NSData) {
+	}
+
 	func connect() {
 		if socket.isConnected || sessionId == nil {
 			sessionId = nil;
@@ -61,19 +66,19 @@ class EddardGateway {
 		dispatch_semaphore_wait(initializationLock, DISPATCH_TIME_FOREVER)
 	}
 
-	func connected() {
+	private func connected() {
 		logger.debug("connected!")
 
-		let initialize = Smpframe.newJsonString(0, id: nextPushframeId(), sessionId: nil, fields: ["deviceId":Settings.SELF.deviceId, "networkType": Settings.SELF.networkType()])
+		let initialize = Smpframe.newJsonString(0, id: nextPushframeId(), sessionId: nil, fields: ["deviceId": Settings.SELF.deviceId, "networkType": Settings.SELF.networkType()])
 
 		socket.writeString(initialize!)
 	}
 
-	func disconnected(error: NSError?) {
+	private func disconnected(error: NSError?) {
 		sessionId = nil
 	}
 
-	func textFrameReceived(textFrame: String) {
+	private func textFrameReceived(textFrame: String) {
 		logger.debug(textFrame)
 
 		// TODO invalid text handling...
@@ -85,49 +90,61 @@ class EddardGateway {
 			onReturnOk(textFrame)
 		case 51:
 			onSetHeartbeatRate(json["sessionId"].stringValue, heartbeatRateInSecond: json["heartbeatRate"].intValue)
-        case 160:
-            onErrorStarkService(json["code"].stringValue, description: json["description"].rawString()!)
-        case 353:
+		case 160:
+			onErrorStarkService(json["code"].stringValue, description: json["description"].rawString()!)
+		case 353:
 			let users = Mapper<User>().mapArray(json["users"].rawString()!)
-            let smpframeId = json["pushframeId"].intValue
-            onUsersRetrieved(smpframeId, users: users)
+			let smpframeId = json["pushframeId"].intValue
+			onUsersRetrieved(smpframeId, users: users)
 		case 354:
 			let channel = Mapper<Channel>().map(json["channel"].rawString())
 			onResCreateChannel(channel)
-        case 355:
-            let message = Mapper<Message>().map(json["message"].rawString())!
-            onMessageCreated(message)
-        case 357:
-            let channelId = json["channelId"].stringValue
-            let messageId = json["messageId"].stringValue
-            onUnreadCountChanged(channelId, messageId: messageId)
+		case 355:
+			let message = Mapper<Message>().map(json["message"].rawString())!
+			onMessageCreated(message)
+		case 357:
+			let channelId = json["channelId"].stringValue
+			let messageId = json["messageId"].stringValue
+			onUnreadCountChanged(channelId, messageId: messageId)
+		case 358:
+			let messages = Mapper<Message>().mapArray(json["messages"].rawString())
+			onMessagesRetrieved(messages)
 		default:
 			logger.error("invalid smpframe! \(textFrame)")
 		}
 	}
+	private func onMessagesRetrieved(messages: [Message]?) {
+		guard let completionHandler = resRetrieveMessagesHandler else {
+			return
+		}
 
-    func onUnreadCountChanged(channelId: String, messageId: String) {
-        for channel in channels {
-            if(channel.id != channelId) { continue }
-            
-            guard let unreadCountChanged = channel.unreadCountChanged else { return }
-            
-            unreadCountChanged(messageId: messageId)
-            return
-        }
-    }
-    
-    func onMessageCreated(message: Message) {
-        for channel in channels {
-            if(channel.id != message.channelId) { continue }
-            
-            if(channel.messageReceived == nil) { continue; }
-            
-            channel.messageReceived!(message: message)
-            return
-        }
-    }
-    
+		completionHandler(messages!)
+
+		resRetrieveMessagesHandler = nil;
+	}
+
+	private func onUnreadCountChanged(channelId: String, messageId: String) {
+		for channel in channels {
+			if (channel.id != channelId) { continue }
+
+			guard let unreadCountChanged = channel.unreadCountChanged else { return }
+
+			unreadCountChanged(messageId: messageId)
+			return
+		}
+	}
+
+	private func onMessageCreated(message: Message) {
+		for channel in channels {
+			if (channel.id != message.channelId) { continue }
+
+			if (channel.messageReceived == nil) { continue; }
+
+			channel.messageReceived!(message: message)
+			return
+		}
+	}
+
 	private func onErrorStarkService(code: String, description: String) {
 		logger.debug("onErrorStarkService : \(code) | \(description)")
 
@@ -138,16 +155,16 @@ class EddardGateway {
 		logger.debug("Retured OK : \(json)")
 	}
 
-    private func onUsersRetrieved(smpframeId: Int, users: [User]?) {
-        let requestPushframeId = smpframeId - 1
-        
+	private func onUsersRetrieved(smpframeId: Int, users: [User]?) {
+		let requestPushframeId = smpframeId - 1
+
 		guard let handler = usersRetrievedHandlers[requestPushframeId] else {
 			return;
 		}
 
 		handler(users: users)
 		usersRetrievedHandlers.removeValueForKey(requestPushframeId)
-    }
+	}
 
 	private func onResCreateChannel(channel: Channel?) {
 		guard let handler = resCreateChannelHandler else {
@@ -162,49 +179,49 @@ class EddardGateway {
 		self.sessionId = sessionId
 		self.heartbeatRateInSecond = heartbeatRateInSecond
 
-        dispatch_semaphore_signal(initializationLock)
+		dispatch_semaphore_signal(initializationLock)
 		// TODO set heartbeatrate handing..
 	}
-    
-    func sendMesssageReceived(channelId: String, messageId: String) {
-        let request = Smpframe.newJsonString(307, id: nextPushframeId(), sessionId: sessionId!, fields: ["messageId": messageId])
-        
-        socket.writeString(request!)
-    }
-    
-    func getMyProfile(completionHandler: (User -> Void)) {
-        if isConnected == false {
-            logger.error("Session is not established!")
-            return;
-        }
-        
-        let pushframeId = nextPushframeId()
-        usersRetrievedHandlers[pushframeId] = { users in
-            guard let users = users else {
-                //TODO error handling
-                return
-            }
-            
-            if users.count <= 0 {
-                //TODO error handling
-                return
-            }
-            
-            completionHandler(users[0])
-        }
-        
-        let request = Smpframe.newJsonString(308, id: pushframeId, sessionId: sessionId!, fields: ["userIds": [Settings.SELF.userId]])
-        
-        socket.writeString(request!)
-    }
-    
+
+	func sendMesssageReceived(channelId: String, messageId: String) {
+		let request = Smpframe.newJsonString(307, id: nextPushframeId(), sessionId: sessionId!, fields: ["messageId": messageId])
+
+		socket.writeString(request!)
+	}
+
+	func getMyProfile(completionHandler: (User -> Void)) {
+		if isConnected == false {
+			logger.error("Session is not established!")
+			return;
+		}
+
+		let pushframeId = nextPushframeId()
+		usersRetrievedHandlers[pushframeId] = { users in
+			guard let users = users else {
+				// TODO error handling
+				return
+			}
+
+			if users.count <= 0 {
+				// TODO error handling
+				return
+			}
+
+			completionHandler(users[0])
+		}
+
+		let request = Smpframe.newJsonString(308, id: pushframeId, sessionId: sessionId!, fields: ["userIds": [Settings.SELF.userId]])
+
+		socket.writeString(request!)
+	}
+
 	func getFriends(completionHandler: ([User]? -> Void)) {
 		if isConnected == false {
 			logger.error("Session is not established!")
 			return;
 		}
 
-        let pushframeId = nextPushframeId()
+		let pushframeId = nextPushframeId()
 		usersRetrievedHandlers[pushframeId] = completionHandler
 
 		let request = Smpframe.newJsonString(303, id: pushframeId, sessionId: sessionId!, fields: ["userId": Settings.SELF.userId])
@@ -236,9 +253,6 @@ class EddardGateway {
 		socket.writeString(request!)
 	}
 
-	private func binaryFrameReceived(data: NSData) {
-	}
-
 	func dispose() {
 		socket.disconnect()
 	}
@@ -260,6 +274,14 @@ class EddardGateway {
 
 		let deviceMap = Mapper().toJSON(device)
 		let request = Smpframe.newJsonString(300, id: nextPushframeId(), sessionId: sessionId!, fields: deviceMap)
+
+		socket.writeString(request!)
+	}
+
+	func retrieveMessages(channelId: String, completionHandler: ([Message] -> Void)) {
+		resRetrieveMessagesHandler = completionHandler
+
+		let request = Smpframe.newJsonString(309, id: nextPushframeId(), sessionId: sessionId!, fields: ["channelId": channelId])
 
 		socket.writeString(request!)
 	}
