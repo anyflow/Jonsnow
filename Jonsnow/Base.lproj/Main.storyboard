@@ -194,6 +194,7 @@
                                                         <connections>
                                                             <outlet property="labelName" destination="3Y8-cJ-Nas" id="Vue-0s-8Jl"/>
                                                             <outlet property="labelSendDate" destination="Jfu-En-Kc8" id="eHs-S6-v7F"/>
+                                                            <outlet property="stackpanelContent" destination="y3p-jp-DZb" id="9ri-b0-ZDY"/>
                                                             <outlet property="textviewChat" destination="ca9-3a-Gfp" id="aS8-As-qla"/>
                                                         </connections>
                                                     </tableViewCell>

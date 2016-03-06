@@ -135,17 +135,16 @@ class SendMessageViewController: UIViewController, UITableViewDataSource, UITabl
 	}
 
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCellWithIdentifier("ChatCell", forIndexPath: indexPath) as! SendmessageTableViewCell
 
 		let message = messages[indexPath.row] as Message
 		let filteredUsers = users.filter({ user in
 			return user.id == message.creatorId
 		})
 
-		cell.labelName.text = "\(filteredUsers[0].name!) | \(message.createDate!.dateStringWithFormat("yyyy - MM - dd HH: mm: ss"))"
-		cell.labelSendDate.text = message.unreadCount!.description
-		cell.textviewChat.text = message.text
+        let cell = tableView.dequeueReusableCellWithIdentifier("ChatCell", forIndexPath: indexPath) as! SendmessageTableViewCell
 
+		cell.setContent(filteredUsers[0].name!, message: message)
+        
 		return cell
 	}
 }
